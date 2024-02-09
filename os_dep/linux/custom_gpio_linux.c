@@ -309,7 +309,7 @@ void gpio_int(u8 is_high)
 }
 int register_net_gpio_init(void)
 {
-	rtl_net = dev_get_by_name(&init_net, "wlan0");
+	rtl_net = dev_get_by_name(&init_net, "<name of the device>");
 	if (!rtl_net) {
 		RTW_PRINT("rtl_net init fail!\n");
 		return -1;
@@ -318,7 +318,7 @@ int register_net_gpio_init(void)
 }
 int unregister_net_gpio_init(void)
 {
-	rtl_net = dev_get_by_name(&init_net, "wlan0");
+	rtl_net = dev_get_by_name(&init_net, "<name of the device>");
 	if (!rtl_net) {
 		RTW_PRINT("rtl_net init fail!\n");
 		return -1;

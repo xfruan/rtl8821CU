@@ -1474,14 +1474,14 @@ int rtw_init_netdev_name(struct net_device *pnetdev, const char *ifname)
 
 	if (padapter->bDongle == 1) {
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 24))
-		TargetNetdev = dev_get_by_name("wlan0");
+		TargetNetdev = dev_get_by_name("<name of the device>");
 #else
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 26))
 		devnet = pnetdev->nd_net;
 #else
 		devnet = dev_net(pnetdev);
 #endif
-		TargetNetdev = dev_get_by_name(devnet, "wlan0");
+		TargetNetdev = dev_get_by_name(devnet, "<name of the device>");
 #endif
 		if (TargetNetdev) {
 			RTW_INFO("Force onboard module driver disappear !!!\n");
@@ -1643,7 +1643,11 @@ int rtw_os_ndev_register(_adapter *adapter, const char *name)
 	u8 rtnl_lock_needed = rtw_rtnl_lock_needed(dvobj);
 
 #ifdef CONFIG_RTW_NAPI
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 1, 0))
+	netif_napi_add_weight(ndev, &adapter->napi, rtw_recv_napi_poll, RTL_NAPI_WEIGHT);
+#else
 	netif_napi_add(ndev, &adapter->napi, rtw_recv_napi_poll, RTL_NAPI_WEIGHT);
+#endif
 #endif /* CONFIG_RTW_NAPI */
 
 #if defined(CONFIG_IOCTL_CFG80211)
